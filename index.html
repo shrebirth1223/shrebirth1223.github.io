@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+<head>
+  <script src='https://d3js.org/d3.v5.min.js'></script>
+  <style> circle {fill: lightblue; stroke: black;} </style>
+</head>
+
+<body onload='init()'>
+  <h1>Hello Worldfffffdfddd</h1>
+  <p>I'm hostedsdafsdf with GitffHub Pages.</p>
+  <svg width=300 height=300></svg>
+
+<script>
+  async function init() {
+    const data = await d3.csv('https://shrebirth1223.github.io/real_estate_data.csv');
+    d3.select('body')
+      .selectAll('p')
+      .data(data)
+      .enter()
+      .append('p')
+        .html(function(d, i) {return i});
+  }
+</script>
 </body>
 </html>
