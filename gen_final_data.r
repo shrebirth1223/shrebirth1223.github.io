@@ -22,11 +22,11 @@ data = left_join(real_estate, m2, by = c("Year" = "Year", "Month" = "Month"))
 
 # 각 칼럼마다 모델 만들고 pred뽑아 저장
 columns = colnames(data)
-columns = columns[!(columns %in% c("Classification", "Year", "Month", "M2", "M2지수"))] # TODO: 나중에 한글로 바꾸기
+columns = columns[!(columns %in% c("Classification", "Year", "Month", "M2", "M2_index"))] # TODO: 나중에 한글로 바꾸기
 for (target in columns){
   tryCatch({
     #print(target)
-    model = lm(paste(target, "~ I(M2지수 ^ 2) + M2지수"), data = data)
+    model = lm(paste(target, "~ I(M2_index ^ 2) + M2_index"), data = data)
     data[paste(target, "_pred", sep="")] = predict(model, newdata = data)
   }, error=function(e){cat("Error in processing(", target, "): ", conditionMessage(e), "\n")})
 }
@@ -37,7 +37,7 @@ write.csv(data, "final_data.csv", na="", row.names = FALSE)
 
 # 번외편. 하나하나 R2 봐보기
 target = "Total"
-model = lm(paste(target, "~ I(M2지수 ^ 2) + M2지수"), data = data[1:412,])
+model = lm(paste(target, "~ I(M2_index ^ 2) + M2_index"), data = data[1:412,])
 #model = lm(paste(target, "~ M2^2 + M2"), data = data[1:412,])
 sprintf("%.20f", coef(model))
 summary(model)
