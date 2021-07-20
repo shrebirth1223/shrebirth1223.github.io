@@ -1,345 +1,605 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <script src='https://d3js.org/d3.v5.min.js'></script>
-  <style>
-    * {
-        box-sizing: border-box;
-    }
-    .row {
-        height: 450px;
-    }
-    .row::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-    [class*="wid-"] {
-        float: left;
-        padding: 15px;
-    }
-    .wid-1 {width: 8.33%;}
-    .wid-2 {width: 16.66%;}
-    .wid-3 {width: 25%;}
-    .wid-4 {width: 33.33%;}
-    .wid-5 {width: 41.66%;}
-    .wid-6 {width: 50%;}
-    .wid-7 {width: 58.33%;}
-    .wid-8 {width: 66.66%;}
-    .wid-9 {width: 75%;}
-    .wid-10 {width: 83.33%;}
-    .wid-11 {width: 91.66%;}
-    .wid-12 {width: 100%;}
-    html {
-        font-family: "Lucida Sans", sans-serif;
-        width: 1024px;
-    }
-    .header {
-        background-color: #2f2d2f;
-        color: #ffffff;
-        padding: 15px;
-    }
-    .nav {
-        height: 100%;
-        background-color: #d6d6d6;
-    }
-    .chart {
-        height: 100%;
-        background-color: #f7f7f7;
-    }
-    .buttons {
-        text-align: center;
-    }
-    .cityButtons {
-        text-align: center;
-        margin-top: 20px;
-    }
-    .storyButton {
-        text-align: center;
-        padding: 10px 20px;
-        margin: 5px 10px;
-    }
-    .cityButton {
-        text-align: center;
-        margin: 5px;
-        width: 47%;
-        padding: 9px;
-    }
-    .cityButtonsHeader {
-        font-size: 22px;
-    }
-    .cityButtonsContainer {
-        text-align: center;
-    }
-  </style>
-</head>
+    <meta charset="utf-8">
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
+        .row {
+            height: 450px;
+        }
+
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        [class*="wid-"] {
+            float: left;
+            padding: 15px;
+        }
+
+        .wid-1 {
+            width: 8.33%;
+        }
+
+        .wid-2 {
+            width: 16.66%;
+        }
+
+        .wid-3 {
+            width: 25%;
+        }
+
+        .wid-4 {
+            width: 33.33%;
+        }
+
+        .wid-5 {
+            width: 41.66%;
+        }
+
+        .wid-6 {
+            width: 50%;
+        }
+
+        .wid-7 {
+            width: 58.33%;
+        }
+
+        .wid-8 {
+            width: 66.66%;
+        }
+
+        .wid-9 {
+            width: 75%;
+        }
+
+        .wid-10 {
+            width: 83.33%;
+        }
+
+        .wid-11 {
+            width: 91.66%;
+        }
+
+        .wid-12 {
+            width: 100%;
+        }
+
+        html {
+            font-family: "Lucida Sans", sans-serif;
+            width: 1024px;
+        }
+
+        .header {
+            background-color: #2f2d2f;
+            color: #ffffff;
+            padding: 15px;
+        }
+
+        .nav {
+            height: 100%;
+            background-color: #d6d6d6;
+        }
+
+        .chart {
+            height: 100%;
+            background-color: #f7f7f7;
+        }
+
+        .buttons {
+            text-align: center;
+        }
+
+        .cityButtons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .storyButton {
+            text-align: center;
+            padding: 10px 20px;
+            margin: 5px 10px;
+        }
+
+        .cityButton {
+            text-align: center;
+            margin: 5px;
+            width: 47%;
+            padding: 9px;
+        }
+
+        .cityButtonsHeader {
+            font-size: 22px;
+        }
+
+        .cityButtonsContainer {
+            text-align: center;
+        }
+    </style>
+</head>
 
 
 <body onload='init()'>
 <div class="content">
-  <div class="header">
-    <h1>Data visualization project: Finding undervalued region</h1>
-  </div>
-
-  <div class="row">
-    <div class="nav wid-4">
-      <div class="buttons">
-        <button class="storyButton" onclick="prev_scene()">Prev</button>
-        <button class="storyButton" onclick="next_scene()">Next</button>
-      </div>
-      <p class="explain"></p>
-      <div class="cityButtonsContainer">
-        <p1 class="cityButtonsHeader"></p1>
-        <div class="cityButtons"></div>
-      </div>
-      <div class="explore"></div>
+    <div class="header">
+        <h1>Data visualization project: Finding undervalued region</h1>
     </div>
 
-    <div id="chart_area" class="chart wid-8">
-    </div>
-  </div>
+    <div class="row">
+        <div class="nav wid-4">
+            <div class="buttons">
+                <button class="storyButton" onclick="prev_scene()">Prev</button>
+                <button class="storyButton" onclick="next_scene()">Next</button>
+            </div>
+            <p class="explain"></p>
+            <div class="cityButtonsContainer">
+                <p1 class="cityButtonsHeader"></p1>
+                <div class="cityButtons"></div>
+            </div>
+            <div class="explore"></div>
+        </div>
 
-  <div class="footer">
-  </div>
+        <div id="chart_area" class="chart wid-8">
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
 </div>
 
 
-
 <script>
-  let data;
-  let x, y, svg, xAxis, yAxis;
-  let margin, width, height;
-  let sceneNumber;
-  let focus;
+    let data;
+    let x, y, svg, xAxis, yAxis;
+    let margin, width, height;
+    let sceneNumber;
+    let tooltip, mouseEffectGroup;
 
-  async function init() {
-    data= await d3.csv('https://shrebirth1223.github.io/final_data.csv');
-    // set the dimensions and margins of the graph
-    margin = {top: 65, right: 30, bottom: 60, left: 90};
-    width = 460 - margin.left - margin.right;
-    height = 400 - margin.top - margin.bottom;
+    async function init() {
+        data = await d3.csv('https://shrebirth1223.github.io/final_data.csv');
+        // set the dimensions and margins of the graph
+        margin = {top: 65, right: 30, bottom: 60, left: 90};
+        width = 460 - margin.left - margin.right;
+        height = 400 - margin.top - margin.bottom;
 
-    // append the svg object to the body of the page
-    svg = d3.select("#chart_area")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+        // append the svg object to the body of the page
+        svg = d3.select("#chart_area")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
 
-    // X axis:
-    x = d3.scaleTime().range([0,width]);
-    xAxis = d3.axisBottom().scale(x)
-        .ticks(10)
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .attr("class","xAxis")
+        // X axis:
+        x = d3.scaleTime().range([0, width]);
+        xAxis = d3.axisBottom().scale(x)
+            .ticks(10)
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "xAxis")
 
-    // Y axis
-    y = d3.scaleLinear().range([height, 0]);
-    yAxis = d3.axisLeft().scale(y);
-    svg.append("g")
-      .attr("class","yAxis");
+        // Y axis
+        y = d3.scaleLinear().range([height, 0]);
+        yAxis = d3.axisLeft().scale(y);
+        svg.append("g")
+            .attr("class", "yAxis");
 
-    // for text area
-    svg.append("g").attr("class","chartTitle").append("text");
-    svg.append("g").attr("class","xAxisTitle").append("text");
-    svg.append("g").attr("class","yAxisTitle").append("text");
-    svg.append("g").attr("class","legend");
+        // for text area
+        svg.append("g").attr("class", "chartTitle").append("text");
+        svg.append("g").attr("class", "xAxisTitle").append("text");
+        svg.append("g").attr("class", "yAxisTitle").append("text");
 
-    sceneNumber = 1;
+        // legend
+        svg.append("g").attr("class", "legend");
+        var legend1 = svg.selectAll('.legend').append("g").attr("class", "legend1").style("opacity", "0")
+        legend1.append("circle").attr("class", "legendCircle1").attr("cx", 20).attr("cy", 20).attr("r", 5).style("fill", "steelblue")
+        legend1.append("text").attr("class", "legendText1").attr("x", 30).attr("y", 21).text("Rent price index").style("font-size", "13px").attr("alignment-baseline", "middle");
 
-    // tooltip
+        var legend2 = svg.selectAll('.legend').append("g").attr("class", "legend2").style("opacity", "0")
+        legend2.append("circle").attr("class", "legendCircle2").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "grey")
+        legend2.append("text").attr("class", "legendText2").attr("x", 30).attr("y", 41).text("M2 index").style("font-size", "13px").attr("alignment-baseline", "middle");
 
-    scene(1);
-  }
+        var legend3 = svg.selectAll('.legend').append("g").attr("class", "legend3").style("opacity", "0")
+        legend3.append("circle").attr("class", "legendCircle3").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "orange")
+        legend3.append("text").attr("class", "legendText3").attr("x", 30).attr("y", 41).text("Prediction").style("font-size", "13px").attr("alignment-baseline", "middle");
 
-  function next_scene() {
-    if (sceneNumber < 4) {
-        sceneNumber = sceneNumber + 1;
+        // annotation
+        svg.append("g").attr("class", "annotation").style("opacity", "0");
+        svg.select(".annotation").append("circle").attr("class", "annotationCircle")
+            .attr("cx", 20).attr("cy", 20).attr("r", 22)
+            .style("stroke", "darkred").style("fill", "none").style("stroke-width", "1px");
+        svg.select(".annotation").append("line").attr("class", "annotationLine")
+            .attr("x1", 20).attr("y1", 20).attr("x2", 20).attr("y2", 20)
+            .style("stroke", "darkred").style("stroke-width", "1px");
+        svg.select(".annotation").append("text").attr("class", "annotationText")
+            .attr("x", 30).attr("y", 21).text("salfdkjasdflkj")
+            .style("font-size", "12px").attr("alignment-baseline", "middle");
+
+        // tooltip
+        tooltip = d3.select("#chart_area").append("div")
+            .attr('id', 'tooltip')
+            .style('position', 'absolute')
+            .style("background-color", "#D3D3D3")
+            .style('padding', 6)
+            .style('display', 'none')
+        mouseEffectGroup = svg.append('g').attr("class", "mouseEffectGroup");
+        mouseEffectGroup.append("path") // vertical line
+            .attr("class", "verticalLine")
+            .style("stroke", "#A9A9A9")
+            .style("stroke-width", "1px")
+            .style("opacity", "0");
+        mouseEffectGroup.append("svg:rect")
+            .attr("id", "tooltipArea")
+
+        sceneNumber = 1;
+        scene(1);
+    }
+
+    function next_scene() {
+        if (sceneNumber < 4) {
+            sceneNumber = sceneNumber + 1;
+            scene(sceneNumber);
+        }
+    }
+
+    function prev_scene() {
+        if (sceneNumber > 1) {
+            sceneNumber = sceneNumber - 1;
+        }
         scene(sceneNumber);
     }
-  }
 
-  function prev_scene() {
-    if (sceneNumber > 1) {
-      sceneNumber = sceneNumber - 1;
+    function scene(sceneNumber) {
+        console.log(sceneNumber)
+        parameters = {
+            1: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": false},
+            2: {"city": "Total", "draw_y": true, "draw_m2": true, "draw_pred": false},
+            3: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
+            4: {"city": "Seoul", "draw_y": true, "draw_m2": false, "draw_pred": true},
+        };
+        update(sceneNumber, parameters[sceneNumber]['city'], parameters[sceneNumber]['draw_y'], parameters[sceneNumber]['draw_m2'], parameters[sceneNumber]['draw_pred']);
     }
-    scene(sceneNumber);
-  }
 
-  function scene(sceneNumber) {
-    console.log(sceneNumber)
-    parameters = {
-        1: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": false},
-        2: {"city": "Total", "draw_y": true, "draw_m2": true, "draw_pred": false},
-        3: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
-        4: {"city": "Seoul", "draw_y": true, "draw_m2": false, "draw_pred": true},
-    };
-    update(sceneNumber, parameters[sceneNumber]['city'], parameters[sceneNumber]['draw_y'], parameters[sceneNumber]['draw_m2'], parameters[sceneNumber]['draw_pred']);
-  }
+    function update(sceneNumber, city, draw_y, draw_m2, draw_pred) {
+        sub_data = extractSubData(city);
+        drawChart(sub_data, city, draw_y, draw_m2, draw_pred);
+        explain(sceneNumber);
+        addAnotation(sceneNumber);
+    }
 
-  function update(sceneNumber, city, draw_y, draw_m2, draw_pred) {
-    sub_data = extractSubData(city);
-    drawChart(sub_data, city, draw_y, draw_m2, draw_pred);
-    explain(sceneNumber);
-    addAnotation(sceneNumber);
-  }
+    function explain(sceneNumber) {
+        messages = {
+            1: "First message",
+            2: "Second message",
+            3: "Third message",
+            4: "Last message",
+            999: ""
+        }
+        d3.select(".explain").html(messages[sceneNumber]);
+        if (sceneNumber == 4) {
+            d3.select(".explore").append("button").attr("onclick", "start_explore()").html("Start exlore!");
+        } else {
+            d3.select(".explore").select("button").remove();
+        }
+    }
 
-  function explain(sceneNumber) {
-      messages = {
-          1: "First message",
-          2: "Second message",
-          3: "Third message",
-          4: "Last message",
-          999: ""
-      }
-      d3.select(".explain").html(messages[sceneNumber]);
-      if (sceneNumber == 4) {
-          d3.select(".explore").append("button").attr("onclick", "start_explore()").html("Start exlore!");
-      } else {
-          d3.select(".explore").select("button").remove();
-      }
-  }
+    function addAnotation(sceneNumber) {
+        if (sceneNumber == 1) {
+            svg.select(".annotation").transition().duration(1000).style("opacity", "0");
+        } else if (sceneNumber == 2) {
+            annotate(220, 220, 80, 10, 22);
+        } else if (sceneNumber == 3) {
+            annotate(120, 220, 80, 10, 22);
+        } else if (sceneNumber == 4) {
+            svg.select(".annotation").transition().duration(1000).style("opacity", "0");
+        } else {
+            svg.select(".annotation").transition().duration(1000).style("opacity", "0");
+        }
+    }
 
-  function addAnotation(sceneNumber) {
+    function annotate(cx, cy, text_left, text_down, circle_size) {
+        text_size = 12;
+        svg.select(".annotationCircle").transition().duration(1000)
+            .attr("cx", cx).attr("cy", cy).attr("r", circle_size)
+            .style("stroke", "darkred").style("fill", "none").style("stroke-width", "1px");
+        svg.select(".annotationLine").transition().duration(1000)
+            .attr("x1", cx).attr("y1", cy+circle_size)
+            .attr("x2", cx - (text_left / 2)).attr("y2", cy + circle_size + text_down)
+            .style("stroke", "darkred").style("stroke-width", "1px");
+        svg.select(".annotationText").transition().duration(1000)
+            .attr("x", cx - text_left).attr("y", cy + circle_size + text_down + text_size).text("salfdkjasdflkj")
+            .style("font-size", text_size.toString() + "px").style("fill", "darkred").attr("alignment-baseline", "middle");
+        svg.select(".annotation").transition().duration(1000).style("opacity", "1");
+    }
 
-  }
 
-  function start_explore() {
-      d3.selectAll(".storyButton").remove();
-      d3.select(".explain").html("");
-      d3.select(".explore").remove();
+    function start_explore() {
+        d3.selectAll(".storyButton").remove();
+        d3.select(".explain").html("");
+        d3.select(".explore").remove();
 
-      d3.select('.cityButtonsHeader').html("Major cities");
-      d3.select('.cityButtons').append("button").html("Seoul").attr("onclick", "update(999, 'Seoul', true, false, true)").attr("class", "cityButton");
-      d3.select('.cityButtons').append("button").html("Busan").attr("onclick", "update(999, 'Busan', true, false, true)").attr("class", "cityButton");
-      d3.select('.cityButtons').append("button").html("Daegu").attr("onclick", "update(999, 'Daegu', true, false, true)").attr("class", "cityButton");
-      d3.select('.cityButtons').append("button").html("Incheon").attr("onclick", "update(999, 'Incheon', true, false, true)").attr("class", "cityButton");
-      d3.select('.cityButtons').append("button").html("Gwangju").attr("onclick", "update(999, 'Gwangju', true, false, true)").attr("class", "cityButton");
-      d3.select('.cityButtons').append("button").html("Daejeon").attr("onclick", "update(999, 'Daejeon', true, false, true)").attr("class", "cityButton");
-      d3.select('.cityButtons').append("button").html("Ulsan").attr("onclick", "update(999, 'Ulsan', true, false, true)").attr("class", "cityButton");
-  }
+        d3.select('.cityButtonsHeader').html("Major cities");
+        d3.select('.cityButtons').append("button").html("Seoul").attr("onclick", "update(999, 'Seoul', true, false, true)").attr("class", "cityButton");
+        d3.select('.cityButtons').append("button").html("Busan").attr("onclick", "update(999, 'Busan', true, false, true)").attr("class", "cityButton");
+        d3.select('.cityButtons').append("button").html("Daegu").attr("onclick", "update(999, 'Daegu', true, false, true)").attr("class", "cityButton");
+        d3.select('.cityButtons').append("button").html("Incheon").attr("onclick", "update(999, 'Incheon', true, false, true)").attr("class", "cityButton");
+        d3.select('.cityButtons').append("button").html("Gwangju").attr("onclick", "update(999, 'Gwangju', true, false, true)").attr("class", "cityButton");
+        d3.select('.cityButtons').append("button").html("Daejeon").attr("onclick", "update(999, 'Daejeon', true, false, true)").attr("class", "cityButton");
+        d3.select('.cityButtons').append("button").html("Ulsan").attr("onclick", "update(999, 'Ulsan', true, false, true)").attr("class", "cityButton");
+    }
 
-  function extractSubData(city) {
-      var parseDate = d3.timeParse("%Y. %m");
-      var sub_data = [];
-      data.forEach(function(d, i) {
-          if (!isNaN(parseFloat(d[city]))) {
-              sub_data.push({
-                  x: parseDate(d['Classification']),
-                  y: parseFloat(d[city]),
-                  m2: parseFloat(d['M2_index']),
-                  pred: parseFloat(d[city + '_pred'])
-              })
-          }
-      });
-      console.log(sub_data);
-      return sub_data;
-  }
+    function extractSubData(city) {
+        var parseDate = d3.timeParse("%Y. %m");
+        var sub_data = [];
+        data.forEach(function (d, i) {
+            if (!isNaN(parseFloat(d[city]))) {
+                sub_data.push({
+                    x: parseDate(d['Classification']),
+                    y: parseFloat(d[city]),
+                    m2: parseFloat(d['M2_index']),
+                    pred: parseFloat(d[city + '_pred'])
+                })
+            }
+        });
+        console.log(sub_data);
+        return sub_data;
+    }
 
-  function drawChart(sub_data, city, draw_y, draw_m2, draw_pred) {
-      //svg.append("text").attr("x", width*0.48).attr("y", -30).text(city).attr("font-weight", 700).style("font-size", "16px").attr("alignment-baseline","middle")
-      if (city == 'Total') {
-          city = 'All cities';
-      }
-      svg.selectAll(".chartTitle").select("text").text(city).attr("x", width*0.48).attr("y", -30).attr("font-weight", 700).style("font-size", "16px").attr("alignment-baseline","middle")
-      // Create X axis and Y axis:
-      x.domain([
-          d3.min(sub_data, function(d) { return d.x }),
-          d3.max(sub_data, function(d) { return d.x }) ]);
-      svg.selectAll(".xAxis").transition()
-          .duration(1000)
-          .call(xAxis);
-      svg.selectAll(".xAxisTitle").select("text").text("Date").attr("x", width/2.0).attr("y", height + 30).style("font-size", "14px").attr("alignment-baseline","middle")
+    function drawChart(sub_data, city, draw_y, draw_m2, draw_pred) {
+        //svg.append("text").attr("x", width*0.48).attr("y", -30).text(city).attr("font-weight", 700).style("font-size", "16px").attr("alignment-baseline","middle")
+        if (city == 'Total') {
+            city = 'All cities';
+        }
+        svg.selectAll(".chartTitle").select("text").text(city).attr("x", width * 0.48).attr("y", -30).attr("font-weight", 700).style("font-size", "16px").attr("alignment-baseline", "middle")
+        // Create X axis and Y axis:
+        x.domain([
+            d3.min(sub_data, function (d) {
+                return d.x
+            }),
+            d3.max(sub_data, function (d) {
+                return d.x
+            })]);
+        svg.selectAll(".xAxis").transition()
+            .duration(1000)
+            .call(xAxis);
+        svg.selectAll(".xAxisTitle").select("text").text("Date").attr("x", width / 2.0).attr("y", height + 30).style("font-size", "14px").attr("alignment-baseline", "middle")
 
-      y.domain([
-          d3.min(sub_data, function(d) { return Math.min(d.y, d.pred) }) - 10,
-          d3.max(sub_data, function(d) { return Math.max(d.y, d.pred) }) + 10]);
-      svg.selectAll(".yAxis")
-          .transition()
-          .duration(1000)
-          .call(yAxis);
-      svg.selectAll(".yAxisTitle").select("text").text("Index value").attr("x", -height*0.63).attr("y", -35).attr("transform", "rotate(-90)").style("font-size", "14px").attr("alignment-baseline","middle")
+        y.domain([
+            d3.min(sub_data, function (d) {
+                return Math.min(d.y, d.pred)
+            }) - 10,
+            d3.max(sub_data, function (d) {
+                return Math.max(d.y, d.pred)
+            }) + 10]);
+        svg.selectAll(".yAxis")
+            .transition()
+            .duration(1000)
+            .call(yAxis);
+        svg.selectAll(".yAxisTitle").select("text").text("Index value").attr("x", -height * 0.63).attr("y", -35).attr("transform", "rotate(-90)").style("font-size", "14px").attr("alignment-baseline", "middle")
 
-      if (draw_y) {
-          // line definition 1: y
-          var line_y = d3.line()
-              .x(function(d) { return x(d.x); })
-              .y(function(d) { return y(d.y); });
-          var u_y = svg.selectAll(".lineGraphY")
-              .data([sub_data], function(d){ return d.x });
-          u_y.enter()
-              .append("path")
-              .attr("class","lineGraphY")
-              .merge(u_y)
-              .transition()
-              .duration(1000)
-              .attr('d', line_y)
-              .attr("fill", "none")
-              .attr("stroke", "steelblue")
-              .attr("stroke-width", 2);
-          svg.selectAll('.legend').selectAll(".legendCircle1").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle1").attr("cx", 20).attr("cy", 20).attr("r", 5).style("fill", "steelblue")
-          svg.selectAll('.legend').selectAll(".legendText1").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText1").attr("x", 30).attr("y", 21).text("Rent price index").style("font-size", "13px").attr("alignment-baseline","middle")
-      } else {
-          svg.selectAll('.legend').selectAll(".legendCircle1").remove();
-          svg.selectAll('.legend').selectAll(".legendText1").remove();
-          svg.selectAll(".lineGraphY").remove();
-      }
+        if (draw_y) {
+            // line definition 1: y
+            var line_y = d3.line()
+                .x(function (d) {
+                    return x(d.x);
+                })
+                .y(function (d) {
+                    return y(d.y);
+                });
+            var u_y = svg.selectAll(".lineGraphY")
+                .data([sub_data], function (d) {
+                    return d.x
+                });
+            u_y.enter()
+                .append("path")
+                .attr("class", "lineGraphY")
+                .merge(u_y)
+                .transition()
+                .duration(1000)
+                .attr('d', line_y)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 2);
 
-      if (draw_m2) {
-          // line definition 2: M2
-          var line_m2 = d3.line()
-              .x(function(d) { return x(d.x); })
-              .y(function(d) { return y(d.m2); });
-          var u_m2 = svg.selectAll(".lineGraphM2")
-              .data([sub_data], function(d){ return d.x });
-          u_m2.enter()
-              .append("path")
-              .attr("class","lineGraphM2")
-              .merge(u_m2)
-              .transition()
-              .duration(1000)
-              .attr('d', line_m2)
-              .attr("fill", "none")
-              .attr("stroke", "grey")
-              .attr("stroke-width", 2);
-          svg.selectAll('.legend').selectAll(".legendCircle2").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle2").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "grey")
-          svg.selectAll('.legend').selectAll(".legendText2").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText2").attr("x", 30).attr("y", 41).text("M2 index").style("font-size", "13px").attr("alignment-baseline","middle")
-      } else {
-          svg.selectAll('.legend').selectAll(".legendCircle2").remove();
-          svg.selectAll('.legend').selectAll(".legendText2").remove();
-          svg.selectAll('.lineGraphM2').transition().duration(1000).attr("stroke-width", 0.0).remove();
-      }
+            svg.select(".legend1").transition().duration(1000).style("opacity", "1");
+            /*
+            svg.selectAll('.legend').selectAll(".legendCircle1").data([1]).enter().append("circle").transition().duration(1000).style("opacity", "1").attr("class", "legendCircle1").attr("cx", 20).attr("cy", 20).attr("r", 5).style("fill", "steelblue")
+            svg.selectAll('.legend').selectAll(".legendText1").data([1]).enter().append("text").transition().duration(1000).style("opacity", "1").attr("class", "legendText1").attr("x", 30).attr("y", 21).text("Rent price index").style("font-size", "13px").attr("alignment-baseline", "middle")
+            */
+        } else {
+            svg.select(".legend1").transition().duration(1000).style("opacity", "0");
+            /*
+            svg.selectAll('.legend').selectAll(".legendCircle1").remove();
+            svg.selectAll('.legend').selectAll(".legendText1").remove();
+             */
+            svg.selectAll(".lineGraphY").remove();
+        }
 
-      if (draw_pred) {
-          // line definition 3: pred
-          var line_pred = d3.line()
-              .x(function(d) { return x(d.x); })
-              .y(function(d) { return y(d.pred); });
-          var u_pred = svg.selectAll(".lineGraphPred")
-              .data([sub_data], function(d){ return d.x });
-          u_pred.enter()
-              .append("path")
-              .attr("class","lineGraphPred")
-              .merge(u_pred)
-              .transition()
-              .duration(1000)
-              .attr('d', line_pred)
-              .attr("fill", "none")
-              .attr("stroke", "orange")
-              .attr("stroke-width", 1.5);
-          svg.selectAll('.legend').selectAll(".legendCircle3").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle3").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "orange")
-          svg.selectAll('.legend').selectAll(".legendText3").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText3").attr("x", 30).attr("y", 41).text("prediction").style("font-size", "13px").attr("alignment-baseline","middle")
-      } else {
-          svg.selectAll('.legend').selectAll(".legendCircle3").remove();
-          svg.selectAll('.legend').selectAll(".legendText3").remove();
-          svg.selectAll('.lineGraphPred').transition().duration(1000).attr("stroke-width", 0.0).remove();
-      }
-  }
+        if (draw_m2) {
+            // line definition 2: M2
+            var line_m2 = d3.line()
+                .x(function (d) {
+                    return x(d.x);
+                })
+                .y(function (d) {
+                    return y(d.m2);
+                });
+            var u_m2 = svg.selectAll(".lineGraphM2")
+                .data([sub_data], function (d) {
+                    return d.x
+                });
+            u_m2.enter()
+                .append("path")
+                .attr("class", "lineGraphM2")
+                .merge(u_m2)
+                .transition()
+                .duration(1000)
+                .attr('d', line_m2)
+                .attr("fill", "none")
+                .attr("stroke", "grey")
+                .attr("stroke-width", 2);
+            svg.select(".legend2").transition().duration(1000).style("opacity", "1");
+            /*
+            svg.selectAll('.legend').selectAll(".legendCircle2").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle2").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "grey")
+            svg.selectAll('.legend').selectAll(".legendText2").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText2").attr("x", 30).attr("y", 41).text("M2 index").style("font-size", "13px").attr("alignment-baseline", "middle")
+             */
+        } else {
+            svg.select(".legend2").transition().duration(1000).style("opacity", "0");
+            /*
+            svg.selectAll('.legend').selectAll(".legendCircle2").remove();
+            svg.selectAll('.legend').selectAll(".legendText2").remove();
+             */
+            svg.selectAll('.lineGraphM2').transition().duration(1000).attr("stroke-width", 0.0).remove();
+        }
+
+        if (draw_pred) {
+            // line definition 3: pred
+            var line_pred = d3.line()
+                .x(function (d) {
+                    return x(d.x);
+                })
+                .y(function (d) {
+                    return y(d.pred);
+                });
+            var u_pred = svg.selectAll(".lineGraphPred")
+                .data([sub_data], function (d) {
+                    return d.x
+                });
+            u_pred.enter()
+                .append("path")
+                .attr("class", "lineGraphPred")
+                .merge(u_pred)
+                .transition()
+                .duration(1000)
+                .attr('d', line_pred)
+                .attr("fill", "none")
+                .attr("stroke", "orange")
+                .attr("stroke-width", 1.5);
+            svg.select(".legend3").transition().duration(1000).style("opacity", "1");
+            /*
+            svg.selectAll('.legend').selectAll(".legendCircle3").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle3").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "orange")
+            svg.selectAll('.legend').selectAll(".legendText3").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText3").attr("x", 30).attr("y", 41).text("Prediction").style("font-size", "13px").attr("alignment-baseline", "middle")
+             */
+        } else {
+            svg.select(".legend3").transition().duration(1000).style("opacity", "0");
+            /*
+            svg.selectAll('.legend').selectAll(".legendCircle3").remove();
+            svg.selectAll('.legend').selectAll(".legendText3").remove();
+             */
+            svg.selectAll('.lineGraphPred').transition().duration(1000).attr("stroke-width", 0.0).remove();
+        }
+
+        // tooltip
+        var tooltipData = [];
+        var y_data = [];
+        var m2_data = [];
+        var pred_data = [];
+        sub_data.forEach(function (d, i) {
+            if (draw_y) y_data.push({x: d['x'], y: d['y'], name: "Rent price index"});
+            if (draw_m2) m2_data.push({x: d['x'], y: d['m2'], name: "M2 index"});
+            if (draw_pred) pred_data.push({x: d['x'], y: d['pred'], name: "Prediction"});
+        });
+        if (draw_y) tooltipData.push(y_data);
+        if (draw_m2) tooltipData.push(m2_data);
+        if (draw_pred) tooltipData.push(pred_data);
+        mouseEffectGroup.selectAll('.effectPerLine')
+            .data(tooltipData)
+            .enter()
+            .append("g")
+                .attr("class", "effectPerLine")
+            .append("circle")
+                .attr("r", 3)
+                .style("stroke", "grey")
+                .style("fill", "none")
+                .style("stroke-width", "1px")
+                .style("opacity", "0");
+        d3.select("#tooltipArea")
+            .attr('width', width)
+            .attr('height', height)
+            .attr('fill', 'none')
+            .attr('pointer-events', 'all')
+            .on('mouseout', function () { // on mouse out hide line, circles and text
+                d3.select(".verticalLine")
+                    .style("opacity", "0");
+                d3.selectAll(".effectPerLine circle")
+                    .style("opacity", "0");
+                d3.selectAll(".effectPerLine text")
+                    .style("opacity", "0");
+                d3.selectAll("#tooltip")
+                    .style('display', 'none')
+            })
+            .on('mouseover', function () { // on mouse in show line, circles and text
+                d3.select(".verticalLine")
+                    .style("opacity", "1");
+                d3.selectAll(".effectPerLine circle")
+                    .style("opacity", "1");
+                d3.selectAll("#tooltip")
+                    .style('display', 'block')
+            })
+            .on('mousemove', function () { // update tooltip content, line, circles and text when mouse moves
+                var mouse = d3.mouse(this)
+                // line update
+                d3.selectAll(".effectPerLine")
+                    .attr("transform", function (d, i) {
+                        var xDate = x.invert(mouse[0]); // use 'invert' to get date corresponding to distance from mouse position relative to svg
+                        var bisect = d3.bisector(function (d) { return d.x; }).left; // retrieve row index of date on parsed csv
+                        var idx = bisect(d, xDate) - 1;
+
+                        d3.select(".verticalLine")
+                            .attr("d", function () {
+                                console.log(xDate);
+                                console.log(d);
+                                console.log(idx);
+                                console.log(d[idx]);
+                                var data = "M" + x(d[idx].x) + "," + (height);
+                                data += " " + x(d[idx].x) + "," + 0;
+                                return data;
+                            });
+                        return "translate(" + x(d[idx].x) + "," + y(d[idx].y) + ")";
+                    });
+                //content update
+                contents = []
+                tooltipData.map(d => {
+                    var xDate = x.invert(mouse[0]);
+                    var bisect = d3.bisector(function (d) { return d.x; }).left;
+                    var idx = bisect(d, xDate) - 1;
+                    contents.push({
+                        name: d[idx].name,
+                        date: d[idx].x,
+                        y: d[idx].y,
+                        year: d[idx].x.getFullYear(),
+                        month: d[idx].x.getMonth() + 1
+                    })
+                })
+                if (contents[0].month < 10) {
+                    contents[0].month = '0' + contents[0].month;
+                }
+                console.log(contents);
+                tooltip.html(contents[0].year + "/" + contents[0].month)
+                    .style('display', 'block')
+                    .style('left', (d3.event.pageX + 20).toString() + "px")
+                    .style('top', (d3.event.pageY - 20).toString() + "px")
+                    .style('font-size', (12).toString() + "px")
+                    .selectAll()
+                    .data(contents).enter() // for each vehicle category, list out name and price of premium
+                    .append('div')
+                    .style('color', 'grey')
+                    .style('font-size', (11).toString() + "px")
+                    .html(d => {
+                        var xDate = x.invert(mouse[0])
+                        var bisect = d3.bisector(function (d) { return d.x; }).left
+                        var idx = bisect(d, xDate)
+                        return d.name + ": " + d.y.toFixed(2);
+                    })
+            })
+    }
 
 </script>
 </body>
