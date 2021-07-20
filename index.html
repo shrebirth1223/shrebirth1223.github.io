@@ -1,25 +1,346 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <script src='https://d3js.org/d3.v5.min.js'></script>
-  <style> circle {fill: lightblue; stroke: black;} </style>
+  <style>
+    * {
+        box-sizing: border-box;
+    }
+    .row {
+        height: 450px;
+    }
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    [class*="wid-"] {
+        float: left;
+        padding: 15px;
+    }
+    .wid-1 {width: 8.33%;}
+    .wid-2 {width: 16.66%;}
+    .wid-3 {width: 25%;}
+    .wid-4 {width: 33.33%;}
+    .wid-5 {width: 41.66%;}
+    .wid-6 {width: 50%;}
+    .wid-7 {width: 58.33%;}
+    .wid-8 {width: 66.66%;}
+    .wid-9 {width: 75%;}
+    .wid-10 {width: 83.33%;}
+    .wid-11 {width: 91.66%;}
+    .wid-12 {width: 100%;}
+    html {
+        font-family: "Lucida Sans", sans-serif;
+        width: 1024px;
+    }
+    .header {
+        background-color: #2f2d2f;
+        color: #ffffff;
+        padding: 15px;
+    }
+    .nav {
+        height: 100%;
+        background-color: #d6d6d6;
+    }
+    .chart {
+        height: 100%;
+        background-color: #f7f7f7;
+    }
+    .buttons {
+        text-align: center;
+    }
+    .cityButtons {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .storyButton {
+        text-align: center;
+        padding: 10px 20px;
+        margin: 5px 10px;
+    }
+    .cityButton {
+        text-align: center;
+        margin: 5px;
+        width: 47%;
+        padding: 9px;
+    }
+    .cityButtonsHeader {
+        font-size: 22px;
+    }
+    .cityButtonsContainer {
+        text-align: center;
+    }
+  </style>
 </head>
 
+
+
 <body onload='init()'>
-  <h1>Hello Worldfffffdfddd</h1>
-  <p>I'm hostedsdafsdf with GitffHub Pages.</p>
-  <svg width=300 height=300></svg>
+<div class="content">
+  <div class="header">
+    <h1>Data visualization project: Finding undervalued region</h1>
+  </div>
+
+  <div class="row">
+    <div class="nav wid-4">
+      <div class="buttons">
+        <button class="storyButton" onclick="prev_scene()">Prev</button>
+        <button class="storyButton" onclick="next_scene()">Next</button>
+      </div>
+      <p class="explain"></p>
+      <div class="cityButtonsContainer">
+        <p1 class="cityButtonsHeader"></p1>
+        <div class="cityButtons"></div>
+      </div>
+      <div class="explore"></div>
+    </div>
+
+    <div id="chart_area" class="chart wid-8">
+    </div>
+  </div>
+
+  <div class="footer">
+  </div>
+</div>
+
+
 
 <script>
+  let data;
+  let x, y, svg, xAxis, yAxis;
+  let margin, width, height;
+  let sceneNumber;
+  let focus;
+
   async function init() {
-    const data = await d3.csv('https://shrebirth1223.github.io/real_estate_data.csv');
-    d3.select('body')
-      .selectAll('p')
-      .data(data)
-      .enter()
-      .append('p')
-        .html(function(d, i) {return i});
+    data= await d3.csv('https://shrebirth1223.github.io/final_data.csv');
+    // set the dimensions and margins of the graph
+    margin = {top: 65, right: 30, bottom: 60, left: 90};
+    width = 460 - margin.left - margin.right;
+    height = 400 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    svg = d3.select("#chart_area")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+    // X axis:
+    x = d3.scaleTime().range([0,width]);
+    xAxis = d3.axisBottom().scale(x)
+        .ticks(10)
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .attr("class","xAxis")
+
+    // Y axis
+    y = d3.scaleLinear().range([height, 0]);
+    yAxis = d3.axisLeft().scale(y);
+    svg.append("g")
+      .attr("class","yAxis");
+
+    // for text area
+    svg.append("g").attr("class","chartTitle").append("text");
+    svg.append("g").attr("class","xAxisTitle").append("text");
+    svg.append("g").attr("class","yAxisTitle").append("text");
+    svg.append("g").attr("class","legend");
+
+    sceneNumber = 1;
+
+    // tooltip
+
+    scene(1);
   }
+
+  function next_scene() {
+    if (sceneNumber < 4) {
+        sceneNumber = sceneNumber + 1;
+        scene(sceneNumber);
+    }
+  }
+
+  function prev_scene() {
+    if (sceneNumber > 1) {
+      sceneNumber = sceneNumber - 1;
+    }
+    scene(sceneNumber);
+  }
+
+  function scene(sceneNumber) {
+    console.log(sceneNumber)
+    parameters = {
+        1: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": false},
+        2: {"city": "Total", "draw_y": true, "draw_m2": true, "draw_pred": false},
+        3: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
+        4: {"city": "Seoul", "draw_y": true, "draw_m2": false, "draw_pred": true},
+    };
+    update(sceneNumber, parameters[sceneNumber]['city'], parameters[sceneNumber]['draw_y'], parameters[sceneNumber]['draw_m2'], parameters[sceneNumber]['draw_pred']);
+  }
+
+  function update(sceneNumber, city, draw_y, draw_m2, draw_pred) {
+    sub_data = extractSubData(city);
+    drawChart(sub_data, city, draw_y, draw_m2, draw_pred);
+    explain(sceneNumber);
+    addAnotation(sceneNumber);
+  }
+
+  function explain(sceneNumber) {
+      messages = {
+          1: "First message",
+          2: "Second message",
+          3: "Third message",
+          4: "Last message",
+          999: ""
+      }
+      d3.select(".explain").html(messages[sceneNumber]);
+      if (sceneNumber == 4) {
+          d3.select(".explore").append("button").attr("onclick", "start_explore()").html("Start exlore!");
+      } else {
+          d3.select(".explore").select("button").remove();
+      }
+  }
+
+  function addAnotation(sceneNumber) {
+
+  }
+
+  function start_explore() {
+      d3.selectAll(".storyButton").remove();
+      d3.select(".explain").html("");
+      d3.select(".explore").remove();
+
+      d3.select('.cityButtonsHeader').html("Major cities");
+      d3.select('.cityButtons').append("button").html("Seoul").attr("onclick", "update(999, 'Seoul', true, false, true)").attr("class", "cityButton");
+      d3.select('.cityButtons').append("button").html("Busan").attr("onclick", "update(999, 'Busan', true, false, true)").attr("class", "cityButton");
+      d3.select('.cityButtons').append("button").html("Daegu").attr("onclick", "update(999, 'Daegu', true, false, true)").attr("class", "cityButton");
+      d3.select('.cityButtons').append("button").html("Incheon").attr("onclick", "update(999, 'Incheon', true, false, true)").attr("class", "cityButton");
+      d3.select('.cityButtons').append("button").html("Gwangju").attr("onclick", "update(999, 'Gwangju', true, false, true)").attr("class", "cityButton");
+      d3.select('.cityButtons').append("button").html("Daejeon").attr("onclick", "update(999, 'Daejeon', true, false, true)").attr("class", "cityButton");
+      d3.select('.cityButtons').append("button").html("Ulsan").attr("onclick", "update(999, 'Ulsan', true, false, true)").attr("class", "cityButton");
+  }
+
+  function extractSubData(city) {
+      var parseDate = d3.timeParse("%Y. %m");
+      var sub_data = [];
+      data.forEach(function(d, i) {
+          if (!isNaN(parseFloat(d[city]))) {
+              sub_data.push({
+                  x: parseDate(d['Classification']),
+                  y: parseFloat(d[city]),
+                  m2: parseFloat(d['M2_index']),
+                  pred: parseFloat(d[city + '_pred'])
+              })
+          }
+      });
+      console.log(sub_data);
+      return sub_data;
+  }
+
+  function drawChart(sub_data, city, draw_y, draw_m2, draw_pred) {
+      //svg.append("text").attr("x", width*0.48).attr("y", -30).text(city).attr("font-weight", 700).style("font-size", "16px").attr("alignment-baseline","middle")
+      if (city == 'Total') {
+          city = 'All cities';
+      }
+      svg.selectAll(".chartTitle").select("text").text(city).attr("x", width*0.48).attr("y", -30).attr("font-weight", 700).style("font-size", "16px").attr("alignment-baseline","middle")
+      // Create X axis and Y axis:
+      x.domain([
+          d3.min(sub_data, function(d) { return d.x }),
+          d3.max(sub_data, function(d) { return d.x }) ]);
+      svg.selectAll(".xAxis").transition()
+          .duration(1000)
+          .call(xAxis);
+      svg.selectAll(".xAxisTitle").select("text").text("Date").attr("x", width/2.0).attr("y", height + 30).style("font-size", "14px").attr("alignment-baseline","middle")
+
+      y.domain([
+          d3.min(sub_data, function(d) { return Math.min(d.y, d.pred) }) - 10,
+          d3.max(sub_data, function(d) { return Math.max(d.y, d.pred) }) + 10]);
+      svg.selectAll(".yAxis")
+          .transition()
+          .duration(1000)
+          .call(yAxis);
+      svg.selectAll(".yAxisTitle").select("text").text("Index value").attr("x", -height*0.63).attr("y", -35).attr("transform", "rotate(-90)").style("font-size", "14px").attr("alignment-baseline","middle")
+
+      if (draw_y) {
+          // line definition 1: y
+          var line_y = d3.line()
+              .x(function(d) { return x(d.x); })
+              .y(function(d) { return y(d.y); });
+          var u_y = svg.selectAll(".lineGraphY")
+              .data([sub_data], function(d){ return d.x });
+          u_y.enter()
+              .append("path")
+              .attr("class","lineGraphY")
+              .merge(u_y)
+              .transition()
+              .duration(1000)
+              .attr('d', line_y)
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-width", 2);
+          svg.selectAll('.legend').selectAll(".legendCircle1").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle1").attr("cx", 20).attr("cy", 20).attr("r", 5).style("fill", "steelblue")
+          svg.selectAll('.legend').selectAll(".legendText1").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText1").attr("x", 30).attr("y", 21).text("Rent price index").style("font-size", "13px").attr("alignment-baseline","middle")
+      } else {
+          svg.selectAll('.legend').selectAll(".legendCircle1").remove();
+          svg.selectAll('.legend').selectAll(".legendText1").remove();
+          svg.selectAll(".lineGraphY").remove();
+      }
+
+      if (draw_m2) {
+          // line definition 2: M2
+          var line_m2 = d3.line()
+              .x(function(d) { return x(d.x); })
+              .y(function(d) { return y(d.m2); });
+          var u_m2 = svg.selectAll(".lineGraphM2")
+              .data([sub_data], function(d){ return d.x });
+          u_m2.enter()
+              .append("path")
+              .attr("class","lineGraphM2")
+              .merge(u_m2)
+              .transition()
+              .duration(1000)
+              .attr('d', line_m2)
+              .attr("fill", "none")
+              .attr("stroke", "grey")
+              .attr("stroke-width", 2);
+          svg.selectAll('.legend').selectAll(".legendCircle2").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle2").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "grey")
+          svg.selectAll('.legend').selectAll(".legendText2").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText2").attr("x", 30).attr("y", 41).text("M2 index").style("font-size", "13px").attr("alignment-baseline","middle")
+      } else {
+          svg.selectAll('.legend').selectAll(".legendCircle2").remove();
+          svg.selectAll('.legend').selectAll(".legendText2").remove();
+          svg.selectAll('.lineGraphM2').transition().duration(1000).attr("stroke-width", 0.0).remove();
+      }
+
+      if (draw_pred) {
+          // line definition 3: pred
+          var line_pred = d3.line()
+              .x(function(d) { return x(d.x); })
+              .y(function(d) { return y(d.pred); });
+          var u_pred = svg.selectAll(".lineGraphPred")
+              .data([sub_data], function(d){ return d.x });
+          u_pred.enter()
+              .append("path")
+              .attr("class","lineGraphPred")
+              .merge(u_pred)
+              .transition()
+              .duration(1000)
+              .attr('d', line_pred)
+              .attr("fill", "none")
+              .attr("stroke", "orange")
+              .attr("stroke-width", 1.5);
+          svg.selectAll('.legend').selectAll(".legendCircle3").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle3").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "orange")
+          svg.selectAll('.legend').selectAll(".legendText3").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText3").attr("x", 30).attr("y", 41).text("prediction").style("font-size", "13px").attr("alignment-baseline","middle")
+      } else {
+          svg.selectAll('.legend').selectAll(".legendCircle3").remove();
+          svg.selectAll('.legend').selectAll(".legendText3").remove();
+          svg.selectAll('.lineGraphPred').transition().duration(1000).attr("stroke-width", 0.0).remove();
+      }
+  }
+
 </script>
 </body>
 </html>
