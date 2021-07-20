@@ -134,10 +134,10 @@
     <div class="row">
         <div class="nav wid-4">
             <div class="buttons">
-                <button class="storyButton" onclick="prev_scene()">Prev</button>
-                <button class="storyButton" onclick="next_scene()">Next</button>
+                <button class="storyButton" id="prevButton" onclick="prev_scene()">Prev</button>
+                <button class="storyButton" id="nextButton" onclick="next_scene()">Next</button>
             </div>
-            <p class="explain"></p>
+            <p class="explain" style="text-align: justify;"></p>
             <div class="cityButtonsContainer">
                 <p1 class="cityButtonsHeader"></p1>
                 <div class="cityButtons"></div>
@@ -162,6 +162,7 @@
     let tooltip, mouseEffectGroup;
 
     async function init() {
+        d3.select("#prevButton").property("disabled", true);
         data = await d3.csv('https://shrebirth1223.github.io/final_data.csv');
         // set the dimensions and margins of the graph
         margin = {top: 65, right: 30, bottom: 60, left: 90};
@@ -243,26 +244,38 @@
     }
 
     function next_scene() {
-        if (sceneNumber < 4) {
+        if (sceneNumber < 8) {
+            d3.select("#prevButton").property("disabled", false);
             sceneNumber = sceneNumber + 1;
             scene(sceneNumber);
+            if (sceneNumber >= 8){ // first scene
+                d3.select("#nextButton").property("disabled", true);
+            }
         }
     }
 
     function prev_scene() {
         if (sceneNumber > 1) {
+            d3.select("#nextButton").property("disabled", false);
             sceneNumber = sceneNumber - 1;
+            if (sceneNumber <= 1){ // first scene
+                d3.select("#prevButton").property("disabled", true);
+            }
+            scene(sceneNumber);
         }
-        scene(sceneNumber);
     }
 
     function scene(sceneNumber) {
         console.log(sceneNumber)
         parameters = {
-            1: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": false},
-            2: {"city": "Total", "draw_y": true, "draw_m2": true, "draw_pred": false},
-            3: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
-            4: {"city": "Seoul", "draw_y": true, "draw_m2": false, "draw_pred": true},
+            1: {"city": "Total", "draw_y": false, "draw_m2": false, "draw_pred": false},
+            2: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": false},
+            3: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": false},
+            4: {"city": "Total", "draw_y": true, "draw_m2": true, "draw_pred": false},
+            5: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
+            6: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
+            7: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
+            8: {"city": "Seoul", "draw_y": true, "draw_m2": false, "draw_pred": true},
         };
         update(sceneNumber, parameters[sceneNumber]['city'], parameters[sceneNumber]['draw_y'], parameters[sceneNumber]['draw_m2'], parameters[sceneNumber]['draw_pred']);
     }
@@ -276,18 +289,44 @@
 
     function explain(sceneNumber) {
         messages = {
-            1: `In this project. <br/>
-            blaskdflj<br/>
-            sdklfj<br/>
-            ]sdafklj<br/>
+            1: `This visualization tool is for house-rental business analysis of South Korea.
+            (In here, house-rental business stands for a business model that buying or building a house and rent it to tenants. It makes money from their monthly/annual rent.)<br/><br/>
+            To operate house-rental business successfully, we have to invest the region where overall rent is stably increasing.
+            If there was a bubble in the house-rent market temporarily and house rent price is dropped,
+            house-rental business can be seriously damaged. Therefore, it is important to properly measure if rent price has some bubble or not. (click next)
             `,
-            2: "Second message",
-            3: "Third message",
-            4: "Last message",
+            2: `Here is an overall rent price index of South Korea in all regions.<br/><br/>
+            As we can see, from the first observation, rent price has been increasing steadily.<br/><br/>
+            `,
+            3: `However, sometimes rent price can fluctuate and it can takes several years to recover its previous status.<br/><br/>
+            This dropped years can cause serious business cash flow problems, so we have to avoid it as much as possible.<br/><br/>
+            Then, how can we measure if current rent price is too high or not? Is there any factor can justify current rent price index?
+            `,
+            4: `In economics, <a href="https://en.wikipedia.org/wiki/Money_supply#Empirical_measures_in_the_United_States_Federal_Reserve_System" target="_blank">M2</a> is
+            a broader measure of money supply. By looking at this M2 index, we can see how much money is flowing in the country.
+            Theoretically, rent price reflects money flow in the market(which means, rent price is keep rising because of the inflation).<br/><br/>
+            `,
+            5: `As we can see, in the chart, Rent price and M2 follows similar trends. But it's not exactly similar.
+            How can we develop M2 index more and use it as a measurement of rent price?
+            `,
+            6: `According to <a href="https://en.wikipedia.org/wiki/Equation_of_exchange" target="_blank">Fisher's Equation of exchange</a>,
+            money supply does not make price increase directly, because velocity of money can be decreasing.<br/><br/>
+            Thus, to properly understand relationship between rent price and M2, it is better to build a regression model and make a prediction based on that.<br/><br/>
+            On the right, I made a prediction model R = -0.00664M^2 + 1.822M + 14.487, which R is rent price index and M is M2 index.
+            `,
+            7: `Using this model-based prediction line, we can see the period where rent price
+            is overvalued(dangerous to make an investment)<br/><br/>
+            and the periods where rent price is undervalued(when is a good timing to make an investment).<br/><br/>
+            Let's see this analysis in more specific regions. How about Seoul, the capital of South Korea?
+            `,
+            8: `As we can see, Seoul's rent price becoming too high compare to money supply in the market.
+            It seems it's not good timing to start a house rental business in Seoul.<br/><br/>
+            Then how about other cities? Now, it's your turn, find cities where looks good timing to start a business.
+            `,
             999: ""
         }
         d3.select(".explain").html(messages[sceneNumber]);
-        if (sceneNumber == 4) {
+        if (sceneNumber == 8) {
             d3.select(".explore").append("button").attr("onclick", "start_explore()").html("Start exlore!");
         } else {
             d3.select(".explore").select("button").remove();
