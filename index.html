@@ -211,17 +211,6 @@
         legend3.append("circle").attr("class", "legendCircle3").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "orange")
         legend3.append("text").attr("class", "legendText3").attr("x", 30).attr("y", 41).text("Prediction").style("font-size", "13px").attr("alignment-baseline", "middle");
 
-        // annotation
-        svg.append("g").attr("class", "annotation").style("opacity", "0");
-        svg.select(".annotation").append("circle").attr("class", "annotationCircle")
-            .attr("cx", 20).attr("cy", 20).attr("r", 22)
-            .style("stroke", "darkred").style("fill", "none").style("stroke-width", "1px");
-        svg.select(".annotation").append("line").attr("class", "annotationLine")
-            .attr("x1", 20).attr("y1", 20).attr("x2", 20).attr("y2", 20)
-            .style("stroke", "darkred").style("stroke-width", "1px");
-        svg.select(".annotation").append("text").attr("class", "annotationText")
-            .attr("x", 30).attr("y", 21).text("salfdkjasdflkj")
-            .style("font-size", "12px").attr("alignment-baseline", "middle");
 
         // tooltip
         tooltip = d3.select("#chart_area").append("div")
@@ -296,7 +285,7 @@
             house-rental business can be seriously damaged. Therefore, it is important to properly measure if rent price has some bubble or not. (click next)
             `,
             2: `Here is an overall rent price index of South Korea in all regions.<br/><br/>
-            As we can see, from the first observation, rent price has been increasing steadily.<br/><br/>
+            As we can see, rent price has been increasing steadily.<br/><br/>
             `,
             3: `However, sometimes rent price can fluctuate and it can takes several years to recover its previous status.<br/><br/>
             This dropped years can cause serious business cash flow problems, so we have to avoid it as much as possible.<br/><br/>
@@ -314,9 +303,8 @@
             Thus, to properly understand relationship between rent price and M2, it is better to build a regression model and make a prediction based on that.<br/><br/>
             On the right, I made a prediction model R = -0.00664M^2 + 1.822M + 14.487, which R is rent price index and M is M2 index.
             `,
-            7: `Using this model-based prediction line, we can see the period where rent price
-            is overvalued(dangerous to make an investment)<br/><br/>
-            and the periods where rent price is undervalued(when is a good timing to make an investment).<br/><br/>
+            7: `Using this model-based prediction line, we can see the period when rent price
+            is overvalued(dangerous to make an investment) and when is the periods that rent price is undervalued(when is a good timing to make an investment).<br/><br/>
             Let's see this analysis in more specific regions. How about Seoul, the capital of South Korea?
             `,
             8: `As we can see, Seoul's rent price becoming too high compare to money supply in the market.
@@ -334,41 +322,72 @@
     }
 
     function addAnotation(sceneNumber) {
-        if (sceneNumber == 1) {
-            svg.select(".annotation").transition().duration(1000).style("opacity", "0");
-        } else if (sceneNumber == 2) {
-            annotate(220, 220, 80, 10, 22);
+        if (sceneNumber == 2) {
+            svg.select("#annotation_1").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_2").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_3").transition().duration(1000).style("opacity", "0").remove();
         } else if (sceneNumber == 3) {
-            annotate(120, 220, 80, 10, 22);
+            annotate("annotation_1", 125, 200, "dropping point", 80, 10, 22);
+            annotate("annotation_2", 193, 144, "dropping point", 40, 17, 35);
+            annotate("annotation_3", 310, 51, "dropping point", 60, 15, 25);
         } else if (sceneNumber == 4) {
-            svg.select(".annotation").transition().duration(1000).style("opacity", "0");
+            svg.select("#annotation_1").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_2").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_3").transition().duration(1000).style("opacity", "0").remove();
+        } else if (sceneNumber == 5) {
+        } else if (sceneNumber == 6) {
+            svg.select("#annotation_4").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_5").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_6").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_7").transition().duration(1000).style("opacity", "0").remove();
+        } else if (sceneNumber == 7) {
+            annotate("annotation_4", 125, 200, "undervalued", 80, 10, 22);
+            annotate("annotation_5", 165, 162, "overvalued", 20, 30, 20);
+            annotate("annotation_6", 227, 125, "undervalued", 40, 25, 26);
+            annotate("annotation_7", 285, 70, "overvalued", 20, 25, 33);
+            svg.select("#annotation_8").transition().duration(1000).style("opacity", "0").remove();
+        } else if (sceneNumber == 8) {
+            svg.select("#annotation_4").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_5").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_6").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_7").transition().duration(1000).style("opacity", "0").remove();
+            annotate("annotation_8", 335, 30, "overvalued", 50, 40, 15);
         } else {
-            svg.select(".annotation").transition().duration(1000).style("opacity", "0");
+            svg.select("#annotation_1").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_2").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_3").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_4").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_5").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_6").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_7").transition().duration(1000).style("opacity", "0").remove();
+            svg.select("#annotation_8").transition().duration(1000).style("opacity", "0").remove();
         }
     }
 
-    function annotate(cx, cy, text_left, text_down, circle_size) {
+    function annotate(annotation_id, cx, cy, text, text_left, text_down, circle_size) {
         text_size = 12;
-        svg.select(".annotationCircle").transition().duration(1000)
+        svg.append("g").attr("class", "annotation").attr("id", annotation_id).style("opacity", "0");
+        svg.select("#" + annotation_id).append("circle").attr("class", "annotationCircle")
             .attr("cx", cx).attr("cy", cy).attr("r", circle_size)
             .style("stroke", "darkred").style("fill", "none").style("stroke-width", "1px");
-        svg.select(".annotationLine").transition().duration(1000)
+        svg.select("#" + annotation_id).append("line").attr("class", "annotationLine")
             .attr("x1", cx).attr("y1", cy+circle_size)
             .attr("x2", cx - (text_left / 2)).attr("y2", cy + circle_size + text_down)
             .style("stroke", "darkred").style("stroke-width", "1px");
-        svg.select(".annotationText").transition().duration(1000)
-            .attr("x", cx - text_left).attr("y", cy + circle_size + text_down + text_size).text("salfdkjasdflkj")
+        svg.select("#" + annotation_id).append("text").attr("class", "annotationText")
+            .attr("x", cx - text_left).attr("y", cy + circle_size + text_down + text_size).text(text)
             .style("font-size", text_size.toString() + "px").style("fill", "darkred").attr("alignment-baseline", "middle");
-        svg.select(".annotation").transition().duration(1000).style("opacity", "1");
+        svg.select("#" + annotation_id).transition().duration(1000).style("opacity", "1");
     }
 
 
     function start_explore() {
+        svg.select("#annotation_8").transition().duration(1000).style("opacity", "0").remove();
         d3.selectAll(".storyButton").remove();
         d3.select(".explain").html("");
         d3.select(".explore").remove();
 
-        d3.select('.cityButtonsHeader').html("Major cities");
+        d3.select('.cityButtonsHeader').html("Major South Korea cities");
         d3.select('.cityButtons').append("button").html("Seoul").attr("onclick", "update(999, 'Seoul', true, false, true)").attr("class", "cityButton");
         d3.select('.cityButtons').append("button").html("Busan").attr("onclick", "update(999, 'Busan', true, false, true)").attr("class", "cityButton");
         d3.select('.cityButtons').append("button").html("Daegu").attr("onclick", "update(999, 'Daegu', true, false, true)").attr("class", "cityButton");
