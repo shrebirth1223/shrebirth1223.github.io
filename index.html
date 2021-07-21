@@ -216,8 +216,11 @@
         tooltip = d3.select("#chart_area").append("div")
             .attr('id', 'tooltip')
             .style('position', 'absolute')
-            .style("background-color", "#D3D3D3")
-            .style('padding', 6)
+            .style("background-color", "rgb(234, 234, 234)")
+            .style("border", "#9a9a9a")
+            .style("border-width", "thin")
+            .style("border-style", "dotted")
+            .style('padding', "5px")
             .style('display', 'none')
         mouseEffectGroup = svg.append('g').attr("class", "mouseEffectGroup");
         mouseEffectGroup.append("path") // vertical line
@@ -233,11 +236,11 @@
     }
 
     function next_scene() {
-        if (sceneNumber < 8) {
+        if (sceneNumber < 7) {
             d3.select("#prevButton").property("disabled", false);
             sceneNumber = sceneNumber + 1;
             scene(sceneNumber);
-            if (sceneNumber >= 8){ // first scene
+            if (sceneNumber >= 7){
                 d3.select("#nextButton").property("disabled", true);
             }
         }
@@ -247,7 +250,7 @@
         if (sceneNumber > 1) {
             d3.select("#nextButton").property("disabled", false);
             sceneNumber = sceneNumber - 1;
-            if (sceneNumber <= 1){ // first scene
+            if (sceneNumber <= 1){
                 d3.select("#prevButton").property("disabled", true);
             }
             scene(sceneNumber);
@@ -263,8 +266,7 @@
             4: {"city": "Total", "draw_y": true, "draw_m2": true, "draw_pred": false},
             5: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
             6: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
-            7: {"city": "Total", "draw_y": true, "draw_m2": false, "draw_pred": true},
-            8: {"city": "Seoul", "draw_y": true, "draw_m2": false, "draw_pred": true},
+            7: {"city": "Seoul", "draw_y": true, "draw_m2": false, "draw_pred": true},
         };
         update(sceneNumber, parameters[sceneNumber]['city'], parameters[sceneNumber]['draw_y'], parameters[sceneNumber]['draw_m2'], parameters[sceneNumber]['draw_pred']);
     }
@@ -294,27 +296,26 @@
             4: `In economics, <a href="https://en.wikipedia.org/wiki/Money_supply#Empirical_measures_in_the_United_States_Federal_Reserve_System" target="_blank">M2</a> is
             a broader measure of money supply. By looking at this M2 index, we can see how much money is flowing in the country.
             Theoretically, rent price reflects money flow in the market(which means, rent price is keep rising because of the inflation).<br/><br/>
-            `,
-            5: `As we can see, in the chart, Rent price and M2 follows similar trends. But it's not exactly similar.
+            As we can see, in the chart, Rent price and M2 follows similar trends. But it's not exactly similar.
             How can we develop M2 index more and use it as a measurement of rent price?
             `,
-            6: `According to <a href="https://en.wikipedia.org/wiki/Equation_of_exchange" target="_blank">Fisher's Equation of exchange</a>,
+            5: `According to <a href="https://en.wikipedia.org/wiki/Equation_of_exchange" target="_blank">Fisher's Equation of exchange</a>,
             money supply does not make price increase directly, because velocity of money can be decreasing.<br/><br/>
             Thus, to properly understand relationship between rent price and M2, it is better to build a regression model and make a prediction based on that.<br/><br/>
             On the right, I made a prediction model R = -0.00664M^2 + 1.822M + 14.487, which R is rent price index and M is M2 index.
             `,
-            7: `Using this model-based prediction line, we can see the period when rent price
+            6: `Using this model-based prediction line, we can see the period when rent price
             is overvalued(dangerous to make an investment) and when is the periods that rent price is undervalued(when is a good timing to make an investment).<br/><br/>
             Let's see this analysis in more specific regions. How about Seoul, the capital of South Korea?
             `,
-            8: `As we can see, Seoul's rent price becoming too high compare to money supply in the market.
+            7: `As we can see, Seoul's rent price becoming too high compare to money supply in the market.
             It seems it's not good timing to start a house rental business in Seoul.<br/><br/>
             Then how about other cities? Now, it's your turn, find cities where looks good timing to start a business.
             `,
             999: ""
         }
         d3.select(".explain").html(messages[sceneNumber]);
-        if (sceneNumber == 8) {
+        if (sceneNumber == 7) {
             d3.select(".explore").append("button").attr("onclick", "start_explore()").html("Start exlore!");
         } else {
             d3.select(".explore").select("button").remove();
@@ -323,45 +324,33 @@
 
     function addAnotation(sceneNumber) {
         if (sceneNumber == 2) {
-            svg.select("#annotation_1").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_2").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_3").transition().duration(1000).style("opacity", "0").remove();
+            clearAnnotations(["annotation_1", "annotation_2", "annotation_3"]);
         } else if (sceneNumber == 3) {
             annotate("annotation_1", 125, 200, "dropping point", 80, 10, 22);
             annotate("annotation_2", 193, 144, "dropping point", 40, 17, 35);
             annotate("annotation_3", 310, 51, "dropping point", 60, 15, 25);
         } else if (sceneNumber == 4) {
-            svg.select("#annotation_1").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_2").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_3").transition().duration(1000).style("opacity", "0").remove();
+            clearAnnotations(["annotation_1", "annotation_2", "annotation_3"]);
         } else if (sceneNumber == 5) {
+            clearAnnotations(["annotation_4", "annotation_5", "annotation_6", "annotation_7"]);
         } else if (sceneNumber == 6) {
-            svg.select("#annotation_4").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_5").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_6").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_7").transition().duration(1000).style("opacity", "0").remove();
-        } else if (sceneNumber == 7) {
             annotate("annotation_4", 125, 200, "undervalued", 80, 10, 22);
             annotate("annotation_5", 165, 162, "overvalued", 20, 30, 20);
             annotate("annotation_6", 227, 125, "undervalued", 40, 25, 26);
             annotate("annotation_7", 285, 70, "overvalued", 20, 25, 33);
-            svg.select("#annotation_8").transition().duration(1000).style("opacity", "0").remove();
-        } else if (sceneNumber == 8) {
-            svg.select("#annotation_4").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_5").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_6").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_7").transition().duration(1000).style("opacity", "0").remove();
+            clearAnnotations(["annotation_8"]);
+        } else if (sceneNumber == 7) {
             annotate("annotation_8", 335, 30, "overvalued", 50, 40, 15);
+            clearAnnotations(["annotation_4", "annotation_5", "annotation_6", "annotation_7"]);
         } else {
-            svg.select("#annotation_1").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_2").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_3").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_4").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_5").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_6").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_7").transition().duration(1000).style("opacity", "0").remove();
-            svg.select("#annotation_8").transition().duration(1000).style("opacity", "0").remove();
+            clearAnnotations(["annotation_1", "annotation_2", "annotation_3", "annotation_4",
+                "annotation_5", "annotation_6", "annotation_7", "annotation_8"]);
         }
+    }
+    function clearAnnotations(ids) {
+        ids.forEach(annotation_id =>
+            svg.select("#" + annotation_id).transition().duration(1000).style("opacity", "0").remove()
+        );
     }
 
     function annotate(annotation_id, cx, cy, text, text_left, text_down, circle_size) {
@@ -382,7 +371,7 @@
 
 
     function start_explore() {
-        svg.select("#annotation_8").transition().duration(1000).style("opacity", "0").remove();
+        clearAnnotations(["annotation_8"]);
         d3.selectAll(".storyButton").remove();
         d3.select(".explain").html("");
         d3.select(".explore").remove();
@@ -471,16 +460,8 @@
                 .attr("stroke-width", 2);
 
             svg.select(".legend1").transition().duration(1000).style("opacity", "1");
-            /*
-            svg.selectAll('.legend').selectAll(".legendCircle1").data([1]).enter().append("circle").transition().duration(1000).style("opacity", "1").attr("class", "legendCircle1").attr("cx", 20).attr("cy", 20).attr("r", 5).style("fill", "steelblue")
-            svg.selectAll('.legend').selectAll(".legendText1").data([1]).enter().append("text").transition().duration(1000).style("opacity", "1").attr("class", "legendText1").attr("x", 30).attr("y", 21).text("Rent price index").style("font-size", "13px").attr("alignment-baseline", "middle")
-            */
         } else {
             svg.select(".legend1").transition().duration(1000).style("opacity", "0");
-            /*
-            svg.selectAll('.legend').selectAll(".legendCircle1").remove();
-            svg.selectAll('.legend').selectAll(".legendText1").remove();
-             */
             svg.selectAll(".lineGraphY").remove();
         }
 
@@ -508,16 +489,8 @@
                 .attr("stroke", "grey")
                 .attr("stroke-width", 2);
             svg.select(".legend2").transition().duration(1000).style("opacity", "1");
-            /*
-            svg.selectAll('.legend').selectAll(".legendCircle2").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle2").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "grey")
-            svg.selectAll('.legend').selectAll(".legendText2").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText2").attr("x", 30).attr("y", 41).text("M2 index").style("font-size", "13px").attr("alignment-baseline", "middle")
-             */
         } else {
             svg.select(".legend2").transition().duration(1000).style("opacity", "0");
-            /*
-            svg.selectAll('.legend').selectAll(".legendCircle2").remove();
-            svg.selectAll('.legend').selectAll(".legendText2").remove();
-             */
             svg.selectAll('.lineGraphM2').transition().duration(1000).attr("stroke-width", 0.0).remove();
         }
 
@@ -545,16 +518,8 @@
                 .attr("stroke", "orange")
                 .attr("stroke-width", 1.5);
             svg.select(".legend3").transition().duration(1000).style("opacity", "1");
-            /*
-            svg.selectAll('.legend').selectAll(".legendCircle3").data([1]).enter().append("circle").transition().duration(1000).attr("class", "legendCircle3").attr("cx", 20).attr("cy", 40).attr("r", 5).style("fill", "orange")
-            svg.selectAll('.legend').selectAll(".legendText3").data([1]).enter().append("text").transition().duration(1000).attr("class", "legendText3").attr("x", 30).attr("y", 41).text("Prediction").style("font-size", "13px").attr("alignment-baseline", "middle")
-             */
         } else {
             svg.select(".legend3").transition().duration(1000).style("opacity", "0");
-            /*
-            svg.selectAll('.legend').selectAll(".legendCircle3").remove();
-            svg.selectAll('.legend').selectAll(".legendText3").remove();
-             */
             svg.selectAll('.lineGraphPred').transition().duration(1000).attr("stroke-width", 0.0).remove();
         }
 
@@ -655,10 +620,7 @@
                     .style('color', 'grey')
                     .style('font-size', (11).toString() + "px")
                     .html(d => {
-                        var xDate = x.invert(mouse[0])
-                        var bisect = d3.bisector(function (d) { return d.x; }).left
-                        var idx = bisect(d, xDate)
-                        return d.name + ": " + d.y.toFixed(2);
+                        return " - " + d.name + ": " + d.y.toFixed(2);
                     })
             })
     }
