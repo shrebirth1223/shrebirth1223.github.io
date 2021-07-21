@@ -23,52 +23,12 @@
             padding: 15px;
         }
 
-        .wid-1 {
-            width: 8.33%;
-        }
-
-        .wid-2 {
-            width: 16.66%;
-        }
-
-        .wid-3 {
-            width: 25%;
-        }
-
         .wid-4 {
             width: 33.33%;
         }
 
-        .wid-5 {
-            width: 41.66%;
-        }
-
-        .wid-6 {
-            width: 50%;
-        }
-
-        .wid-7 {
-            width: 58.33%;
-        }
-
         .wid-8 {
             width: 66.66%;
-        }
-
-        .wid-9 {
-            width: 75%;
-        }
-
-        .wid-10 {
-            width: 83.33%;
-        }
-
-        .wid-11 {
-            width: 91.66%;
-        }
-
-        .wid-12 {
-            width: 100%;
         }
 
         html {
@@ -240,7 +200,7 @@
             d3.select("#prevButton").property("disabled", false);
             sceneNumber = sceneNumber + 1;
             scene(sceneNumber);
-            if (sceneNumber >= 7){
+            if (sceneNumber >= 7) {
                 d3.select("#nextButton").property("disabled", true);
             }
         }
@@ -250,7 +210,7 @@
         if (sceneNumber > 1) {
             d3.select("#nextButton").property("disabled", false);
             sceneNumber = sceneNumber - 1;
-            if (sceneNumber <= 1){
+            if (sceneNumber <= 1) {
                 d3.select("#prevButton").property("disabled", true);
             }
             scene(sceneNumber);
@@ -287,7 +247,7 @@
             house-rental business can be seriously damaged. Therefore, it is important to properly measure if rent price has some bubble or not. (click next)
             `,
             2: `Here is an overall rent price index of South Korea in all regions.<br/><br/>
-            As we can see, rent price has been increasing steadily.<br/><br/>
+            As we can see in this observation, rent price has been increasing steadily.<br/><br/>
             `,
             3: `However, sometimes rent price can fluctuate and it can takes several years to recover its previous status.<br/><br/>
             This dropped years can cause serious business cash flow problems, so we have to avoid it as much as possible.<br/><br/>
@@ -347,6 +307,7 @@
                 "annotation_5", "annotation_6", "annotation_7", "annotation_8"]);
         }
     }
+
     function clearAnnotations(ids) {
         ids.forEach(annotation_id =>
             svg.select("#" + annotation_id).transition().duration(1000).style("opacity", "0").remove()
@@ -360,7 +321,7 @@
             .attr("cx", cx).attr("cy", cy).attr("r", circle_size)
             .style("stroke", "darkred").style("fill", "none").style("stroke-width", "1px");
         svg.select("#" + annotation_id).append("line").attr("class", "annotationLine")
-            .attr("x1", cx).attr("y1", cy+circle_size)
+            .attr("x1", cx).attr("y1", cy + circle_size)
             .attr("x2", cx - (text_left / 2)).attr("y2", cy + circle_size + text_down)
             .style("stroke", "darkred").style("stroke-width", "1px");
         svg.select("#" + annotation_id).append("text").attr("class", "annotationText")
@@ -540,13 +501,13 @@
             .data(tooltipData)
             .enter()
             .append("g")
-                .attr("class", "effectPerLine")
+            .attr("class", "effectPerLine")
             .append("circle")
-                .attr("r", 3)
-                .style("stroke", "grey")
-                .style("fill", "none")
-                .style("stroke-width", "1px")
-                .style("opacity", "0");
+            .attr("r", 3)
+            .style("stroke", "grey")
+            .style("fill", "none")
+            .style("stroke-width", "1px")
+            .style("opacity", "0");
         d3.select("#tooltipArea")
             .attr('width', width)
             .attr('height', height)
@@ -576,7 +537,9 @@
                 d3.selectAll(".effectPerLine")
                     .attr("transform", function (d, i) {
                         var xDate = x.invert(mouse[0]); // use 'invert' to get date corresponding to distance from mouse position relative to svg
-                        var bisect = d3.bisector(function (d) { return d.x; }).left; // retrieve row index of date on parsed csv
+                        var bisect = d3.bisector(function (d) {
+                            return d.x;
+                        }).left; // retrieve row index of date on parsed csv
                         var idx = bisect(d, xDate) - 1;
 
                         d3.select(".verticalLine")
@@ -595,7 +558,9 @@
                 contents = []
                 tooltipData.map(d => {
                     var xDate = x.invert(mouse[0]);
-                    var bisect = d3.bisector(function (d) { return d.x; }).left;
+                    var bisect = d3.bisector(function (d) {
+                        return d.x;
+                    }).left;
                     var idx = bisect(d, xDate) - 1;
                     contents.push({
                         name: d[idx].name,
