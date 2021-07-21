@@ -4,35 +4,8 @@
     <meta charset="utf-8">
     <script src='https://d3js.org/d3.v5.min.js'></script>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        .row {
-            height: 450px;
-        }
-
-        .row::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
-        [class*="wid-"] {
-            float: left;
-            padding: 15px;
-        }
-
-        .wid-4 {
-            width: 33.33%;
-        }
-
-        .wid-8 {
-            width: 66.66%;
-        }
-
         html {
-            font-family: "Lucida Sans", sans-serif;
+            font-family: sans-serif;
             width: 1024px;
         }
 
@@ -40,6 +13,23 @@
             background-color: #2f2d2f;
             color: #ffffff;
             padding: 15px;
+        }
+
+        .main {
+            height: 450px;
+        }
+
+        .widLeft {
+            width: 33.33%;
+        }
+
+        .widRight {
+            width: 66.66%;
+        }
+
+        [class*="wid"] {
+            padding: 14px;
+            float: left;
         }
 
         .nav {
@@ -81,6 +71,10 @@
         .cityButtonsContainer {
             text-align: center;
         }
+
+        * {
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -91,8 +85,8 @@
         <h1>Data visualization project: Finding undervalued region</h1>
     </div>
 
-    <div class="row">
-        <div class="nav wid-4">
+    <div class="main">
+        <div class="nav widLeft">
             <div class="buttons">
                 <button class="storyButton" id="prevButton" onclick="prev_scene()">Prev</button>
                 <button class="storyButton" id="nextButton" onclick="next_scene()">Next</button>
@@ -105,11 +99,7 @@
             <div class="explore"></div>
         </div>
 
-        <div id="chart_area" class="chart wid-8">
-        </div>
-    </div>
-
-    <div class="footer">
+        <div id="chart_area" class="chart widRight"></div>
     </div>
 </div>
 
